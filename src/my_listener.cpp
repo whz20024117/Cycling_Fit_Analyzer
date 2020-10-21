@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <string>
 
 #include "fit_decode.hpp"
 #include "fit_mesg_broadcaster.hpp"
@@ -9,7 +10,7 @@
 
 void Listener::OnMesg(fit::RecordMesg& mesg)
 {
-    // get all the interested fields
+    // get all the interested fields from Record Message
     fit::Field *field_timestamp = mesg.GetField(fit::RecordMesg::FieldDefNum::Timestamp);
     fit::Field *field_altitude = mesg.GetField(fit::RecordMesg::FieldDefNum::Altitude);
     fit::Field *field_power = mesg.GetField(fit::RecordMesg::FieldDefNum::Power);
@@ -17,21 +18,21 @@ void Listener::OnMesg(fit::RecordMesg& mesg)
     fit::Field *field_cadence = mesg.GetField(fit::RecordMesg::FieldDefNum::Cadence);
     fit::Field *field_speed = mesg.GetField(fit::RecordMesg::FieldDefNum::Speed);
 
-    // outfile << field_timestamp->GetName().c_str() << "(" << field_timestamp->GetUnits().c_str() << "),";
-    // outfile << field_power->GetName().c_str() << "(" << field_power->GetUnits().c_str() << "),";
-    // outfile << field_accumulatedpower->GetName().c_str() << "(" << field_accumulatedpower->GetUnits().c_str() << "),";
-    // outfile << field_heartrate->GetName().c_str() << "(" << field_heartrate->GetUnits().c_str() << "),";
-    // outfile << field_cadence->GetName().c_str() << "(" << field_cadence->GetUnits().c_str() << "),";
-    // outfile << field_speed->GetName().c_str() << "(" << field_speed->GetUnits().c_str() << "),";
-    // outfile << field_distance->GetName().c_str() << "(" << field_distance->GetUnits().c_str() << "),";
+    if (FIT_NULL != field_timestamp){outfile << field_timestamp->GetSTRINGValue() << ",";} else {outfile << "null,";}
+    if (FIT_NULL != field_altitude){outfile << field_altitude->GetSTRINGValue() << ",";} else {outfile << "null,";}
+    if (FIT_NULL != field_power){outfile << field_power->GetSTRINGValue() << ",";} else {outfile << "null,";}
+    if (FIT_NULL != field_heartrate){outfile << field_heartrate->GetSTRINGValue() << ",";} else {outfile << "null,";}
+    if (FIT_NULL != field_cadence){outfile << field_cadence->GetSTRINGValue() << ",";} else {outfile << "null,";}
+    if (FIT_NULL != field_speed){outfile << field_speed->GetSTRINGValue() << "\n";} else {outfile << "null\n";}
 
     // run ./Activity.fit ./beta.csv
 };
 
 void Listener::OnMesg(fit::Mesg& mesg)
 {   
-    //if (mesg.GetName() == "record"){return;}
+    if (mesg.GetName() == "record"){return;}
     if (mesg.GetName() == "device_info"){return;}
+    if (mesg.GetName() == "lap"){return;}
 
     printf("On Mesg:\n");
     std::wcout << L"   New Mesg: " << mesg.GetName().c_str() << L".  It has " << mesg.GetNumFields() << L" field(s) and " << mesg.GetNumDevFields() << " developer field(s).\n";
@@ -87,13 +88,5 @@ void Listener::PrintValues(const fit::FieldBase& field)
         }
 }
 
-void Listener::OnMesg(fit::FileIdMesg& mesg){}
-void Listener::OnMesg(fit::UserProfileMesg& mesg){}
-void Listener::OnMesg(fit::DeviceInfoMesg& mesg){}
-void Listener::OnMesg(fit::MonitoringMesg& mesg){}
-void Listener::OnDeveloperFieldDescription( const fit::DeveloperFieldDescription& desc )
-{
-    printf( "New Developer Field Description\n" );
-    printf( "   App Version: %d\n", desc.GetApplicationVersion() );
-    printf( "   Field Number: %d\n", desc.GetFieldDefinitionNumber() );
-}
+void Listener::OnMesg(fit::LapMesg& mesg){}
+void Listener::OnMesg(fit::SessionMesg& mesg){}

@@ -8,30 +8,30 @@
 
 class Listener
     : 
-    public fit::FileIdMesgListener
-    , public fit::UserProfileMesgListener
-    , public fit::MonitoringMesgListener
-    , public fit::DeviceInfoMesgListener
-    , public fit::MesgListener
-    , public fit::DeveloperFieldDescriptionListener
+    public fit::MesgListener
     , public fit::RecordMesgListener
+    , public fit::LapMesgListener
+    , public fit::SessionMesgListener
 {
-    std::ofstream outfile;
+    std::wofstream outfile;
     
     public:
         Listener(std::string path)
         {
             outfile.open(path.c_str());
-            outfile<< "timestamp(s)," << "power(watts)," << "heart_rate(bpm)," << "cadence(rmp),"<<"speed(m/s)";
+            outfile<< "timestamp(s)," 
+            << "altitude(m)," 
+            << "power(watts)," 
+            << "heart_rate(bpm)," 
+            << "cadence(rpm),"
+            <<"speed(m/s)"
+            <<"\n";
         }
         ~Listener(){outfile.close();}
         void OnMesg(fit::Mesg& mesg) override;
         void OnMesg(fit::RecordMesg& mesg) override;
-        void OnMesg(fit::FileIdMesg& mesg) override;
-        void OnMesg(fit::UserProfileMesg& mesg) override;
-        void OnMesg(fit::DeviceInfoMesg& mesg) override;
-        void OnMesg(fit::MonitoringMesg& mesg) override;
-        void OnDeveloperFieldDescription( const fit::DeveloperFieldDescription& desc ) override;
+        void OnMesg(fit::LapMesg& mesg) override;
+        void OnMesg(fit::SessionMesg& mesg) override;
         static void PrintValues(const fit::FieldBase& field);
 
 };

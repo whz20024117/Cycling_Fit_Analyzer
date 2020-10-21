@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 
     if (argc != 3)
     {
-        printf("Usage: beta <.fit_file> <outputfile>\n");
+        printf("Usage: beta <fit_file> <outputfile>\n");
         return -1;
     }
 
@@ -42,14 +42,14 @@ int main(int argc, char* argv[])
     
 
     try
-   {
-      decode.Read(file, mesgBroadcaster);
-   }
-   catch (const fit::RuntimeException& e)
-   {
-      printf("Exception decoding file: %s\n", e.what());
-      return -1;
-   }
+    {
+        decode.Read(file, mesgBroadcaster);
+    }
+    catch (const fit::RuntimeException& e)
+    {
+        printf("Exception decoding file: %s\n", e.what());
+        return -1;
+    }
 
 
 }
