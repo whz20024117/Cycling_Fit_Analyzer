@@ -51,12 +51,14 @@ void Listener::OnMesg(fit::RecordMesg& mesg)
 
 void Listener::OnMesg(fit::Mesg& mesg)
 {   
+    // Debug Function for all mesg
     if (mesg.GetName() == "record"){return;}
     if (mesg.GetName() == "device_info"){return;}
     if (mesg.GetName() == "lap"){return;}
     if (mesg.GetName() == "event"){return;}
     if (mesg.GetName() == "activity"){return;}
     if (mesg.GetName() == "session"){return;}
+    if (mesg.GetName() == "file_id"){return;}
 
     printf("On Mesg:\n");
     std::wcout << L"   New Mesg: " << mesg.GetName().c_str() << L".  It has " << mesg.GetNumFields() << L" field(s) and " << mesg.GetNumDevFields() << " developer field(s).\n";
@@ -77,6 +79,7 @@ void Listener::OnMesg(fit::Mesg& mesg)
 
 void Listener::PrintValues(const fit::FieldBase& field)
 {
+    // This is a debug function from fitsdk library
         for (FIT_UINT8 j=0; j< (FIT_UINT8)field.GetNumValues(); j++)
         {
             std::wcout << L"       Val" << j << L": ";
@@ -176,5 +179,41 @@ void Listener::OnMesg(fit::SessionMesg& mesg)
     if (FIT_NULL != field_maxheartrate){sessionfile << field_maxheartrate->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
     if (FIT_NULL != field_avgcadence){sessionfile << field_avgcadence->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
     if (FIT_NULL != field_maxcadence){sessionfile << field_maxcadence->GetSTRINGValue() << "\n";} else {sessionfile << "null\n";}
+
+    sessionSummary summary;
     
+    if (FIT_NULL != field_totalelapsedtime)
+    {summary.elapsedtime=field_totalelapsedtime->GetFLOAT32Value();} else {summary.elapsedtime=NULL_HOLDER;}
+    if (FIT_NULL != field_totaldistance)
+    {summary.distance=field_totaldistance->GetFLOAT32Value();} else {summary.distance=NULL_HOLDER;}
+    if (FIT_NULL != field_totalcalories)
+    {summary.calories=field_totalcalories->GetFLOAT32Value();} else {summary.calories=NULL_HOLDER;}
+    if (FIT_NULL != field_avgspeed)
+    {summary.avgspeed=field_avgspeed->GetFLOAT32Value();} else {summary.avgspeed=NULL_HOLDER;}
+    if (FIT_NULL != field_maxspeed)
+    {summary.maxspeed=field_maxspeed->GetFLOAT32Value();} else {summary.maxspeed=NULL_HOLDER;}
+    if (FIT_NULL != field_avgpower)
+    {summary.avgpower=field_avgpower->GetFLOAT32Value();} else {summary.avgpower=NULL_HOLDER;}
+    if (FIT_NULL != field_maxpower)
+    {summary.maxpower=field_maxpower->GetFLOAT32Value();} else {summary.maxpower=NULL_HOLDER;}
+    if (FIT_NULL != field_totalascent)
+    {summary.ascent=field_totalascent->GetFLOAT32Value();} else {summary.ascent=NULL_HOLDER;}
+    if (FIT_NULL != field_totaldescent)
+    {summary.descent=field_totaldescent->GetFLOAT32Value();} else {summary.descent=NULL_HOLDER;}
+    if (FIT_NULL != field_avgheartrate)
+    {summary.avgheartrate=field_avgheartrate->GetFLOAT32Value();} else {summary.avgheartrate=NULL_HOLDER;}
+    if (FIT_NULL != field_maxheartrate)
+    {summary.maxheartrate=field_maxheartrate->GetFLOAT32Value();} else {summary.maxheartrate=NULL_HOLDER;}
+    if (FIT_NULL != field_avgcadence)
+    {summary.avgcadence=field_avgcadence->GetFLOAT32Value();} else {summary.avgcadence=NULL_HOLDER;}
+    if (FIT_NULL != field_maxcadence)
+    {summary.maxcadence=field_maxcadence->GetFLOAT32Value();} else {summary.maxcadence=NULL_HOLDER;}
+
+    this->summaries.emplace_back(summary);
+    
+}
+
+const std::vector<sessionSummary> Listener::getSummaries()
+{
+    return summaries;
 }

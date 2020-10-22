@@ -6,6 +6,23 @@
 #include "../lib/fitsdk/fit_mesg_broadcaster.hpp"
 #include "../lib/fitsdk/fit_developer_field_description.hpp"
 
+struct sessionSummary
+{
+    float avgpower;
+    float maxpower;
+    float distance;
+    float avgcadence;
+    float maxcadence;
+    float calories;
+    float elapsedtime;
+    float avgspeed;
+    float maxspeed;
+    float avgheartrate;
+    float maxheartrate;
+    float ascent;
+    float descent;
+};
+
 class Listener
     : 
     public fit::MesgListener
@@ -16,14 +33,17 @@ class Listener
     std::wofstream recordfile;
     std::wofstream sessionfile;
     std::wofstream lapfile;
-    std::vector<FIT_UINT32> timestamp_vec;
-    std::vector<FIT_FLOAT32> altitude_vec;
-    std::vector<FIT_FLOAT32> power_vec;
-    std::vector<FIT_FLOAT32> heartrate_vec;
-    std::vector<FIT_FLOAT32> cadence_vec;
-    std::vector<FIT_FLOAT32> speed_vec;
+
+    std::vector<sessionSummary> summaries;
     
     public:
+        std::vector<FIT_UINT32> timestamp_vec;
+        std::vector<FIT_FLOAT32> altitude_vec;
+        std::vector<FIT_FLOAT32> power_vec;
+        std::vector<FIT_FLOAT32> heartrate_vec;
+        std::vector<FIT_FLOAT32> cadence_vec;
+        std::vector<FIT_FLOAT32> speed_vec;
+
         Listener(std::string path)
         {
             // Prep Record File
@@ -87,5 +107,6 @@ class Listener
         void OnMesg(fit::LapMesg& mesg) override;
         void OnMesg(fit::SessionMesg& mesg) override;
         static void PrintValues(const fit::FieldBase& field);
+        const std::vector<sessionSummary> getSummaries();
 
 };

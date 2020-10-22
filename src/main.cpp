@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
 
     try
     {
+        printf("Start Reading FIT file...\n");
         decode.Read(file, mesgBroadcaster);
     }
     catch (const fit::RuntimeException& e)
@@ -50,5 +51,33 @@ int main(int argc, char* argv[])
         return -1;
     }
 
+    // Stdout Session summary(s)
+    std::wcout.setf(std::ios::fixed);
+    std::wcout.precision(2);
+    std::wcout<<L"\nFinish reading and exporting.\n\n";
+    std::wcout<<L"\nSession summary(s): \n";
+    const std::vector<sessionSummary> summaries = listener.getSummaries();
+    for(int i=0; i<summaries.size(); i++)
+    {
+        sessionSummary summary = summaries[i];
+        std::wcout<<L"  Session "<< i+1 <<L": \n";
+        std::wcout
+        <<L"      Total Elapsed Time: "<<summary.elapsedtime/3600<<L" hours\n"
+        << L"      Total Distance: "<<summary.distance/1000<<L" km\n"
+        << L"      Total Calories: "<<summary.calories<<L" kcal\n"
+        << L"      Average Speed: "<<summary.avgspeed*3.6<<L" km/h\n"
+        << L"      Max Speed: "<<summary.maxspeed*3.6<<L" km/h\n"
+        << L"      Average Power: "<<summary.avgpower<<L" watts\n"
+        << L"      Max Power: "<<summary.maxpower<<L" watts\n"
+        << L"      Total Ascent: "<<summary.ascent<<L" m\n"
+        << L"      Total Descent: "<<summary.descent<<L" m\n"
+        << L"      Average Heartrate: "<<summary.avgheartrate<<L" bpm\n"
+        << L"      Max Heartrate: "<<summary.maxheartrate<<L" bpm\n"
+        << L"      Average Cadence: "<<summary.avgcadence<<L" rpm\n"
+        << L"      Max Cadence: "<<summary.maxcadence<<L" rpm\n"
+        << L"\n"
+        ;
+
+    }
 
 }
