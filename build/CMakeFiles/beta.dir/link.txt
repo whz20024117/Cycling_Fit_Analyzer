@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/beta.dir/src/main.cpp.o CMakeFiles/beta.dir/src/my_listener.cpp.o  -o beta libfitsdk.a 

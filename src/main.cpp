@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 
     if (argc != 3)
     {
-        printf("Usage: beta <fit_file> <outputfile>\n");
+        printf("Usage: beta <fit_file> <out_dir>\n");
         return -1;
     }
 
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     
     if (!file.is_open())
     {
-        printf("Error opening file %s\n", argv[1]);
+        printf("Error opening fit file %s\n", argv[1]);
         return -1;
     }
 
@@ -35,10 +35,6 @@ int main(int argc, char* argv[])
 
     mesgBroadcaster.AddListener((fit::MesgListener &) listener);
     mesgBroadcaster.AddListener((fit::RecordMesgListener&) listener);
-    mesgBroadcaster.AddListener((fit::FileIdMesgListener &)listener);
-    mesgBroadcaster.AddListener((fit::UserProfileMesgListener &)listener);
-    mesgBroadcaster.AddListener((fit::MonitoringMesgListener &)listener);
-    mesgBroadcaster.AddListener((fit::DeviceInfoMesgListener &)listener);
     
 
     try

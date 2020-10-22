@@ -1,0 +1,4 @@
+/home/cocowang/Working/Projects/Cycling_Fit_Analyzer/build/CMakeFiles/rebuild_cache.dir
+/home/cocowang/Working/Projects/Cycling_Fit_Analyzer/build/CMakeFiles/edit_cache.dir
+/home/cocowang/Working/Projects/Cycling_Fit_Analyzer/build/CMakeFiles/beta.dir
+/home/cocowang/Working/Projects/Cycling_Fit_Analyzer/build/CMakeFiles/fitsdk.dir
