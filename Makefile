@@ -1,8 +1,8 @@
-CXX = g++ -g
-CFLAGS   := -Wall
-LDFLAGS  := -Llib            
-LDLIBS   := 
-CPPFLAGS := -Iinclude -MMD -MP
+CXX = g++
+CFLAGS   := -Wall -g
+LDFLAGS  := -Llib/build
+LDLIBS   := -lfitsdk
+CPPFLAGS := -Iinclude -Ilib/fitsdk -MMD -MP
 
 SRC_DIR := src
 OBJ_DIR := obj
@@ -16,8 +16,8 @@ OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
 all: $(EXE)
 .PHONY: all clean
 
-$(EXE) : $(OBJ) | $(BIN_DIR)
-	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+$(EXE) : $(OBJ) libfitsdk | $(BIN_DIR)
+	$(CXX) $(LDFLAGS) $(OBJ) $(LDLIBS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 	$(CXX) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
@@ -25,8 +25,13 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 $(BIN_DIR) $(OBJ_DIR):
 	mkdir -p $@
 
+.PHONY: libfitsdk
+libfitsdk:
+	$(MAKE) -C lib/fitsdk
+
 clean:
 	@$(RM) -rv $(BIN_DIR) $(OBJ_DIR)
+	$(MAKE) clean -C lib/fitsdk
 
 -include $(OBJ:.o=.d)
 
