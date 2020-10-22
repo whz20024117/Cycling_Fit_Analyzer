@@ -2,10 +2,12 @@
 #include <iostream>
 #include <string>
 
-#include "fit_decode.hpp"
-#include "fit_mesg_broadcaster.hpp"
-#include "fit_developer_field_description.hpp"
+#include "../lib/fitsdk/fit_decode.hpp"
+#include "../lib/fitsdk/fit_mesg_broadcaster.hpp"
+#include "../lib/fitsdk/fit_developer_field_description.hpp"
 #include "my_listener.hpp"
+
+#define NULL_HOLDER -100.0
 
 
 void Listener::OnMesg(fit::RecordMesg& mesg)
@@ -18,12 +20,31 @@ void Listener::OnMesg(fit::RecordMesg& mesg)
     fit::Field *field_cadence = mesg.GetField(fit::RecordMesg::FieldDefNum::Cadence);
     fit::Field *field_speed = mesg.GetField(fit::RecordMesg::FieldDefNum::Speed);
 
-    if (FIT_NULL != field_timestamp){outfile << field_timestamp->GetSTRINGValue() << ",";} else {outfile << "null,";}
-    if (FIT_NULL != field_altitude){outfile << field_altitude->GetSTRINGValue() << ",";} else {outfile << "null,";}
-    if (FIT_NULL != field_power){outfile << field_power->GetSTRINGValue() << ",";} else {outfile << "null,";}
-    if (FIT_NULL != field_heartrate){outfile << field_heartrate->GetSTRINGValue() << ",";} else {outfile << "null,";}
-    if (FIT_NULL != field_cadence){outfile << field_cadence->GetSTRINGValue() << ",";} else {outfile << "null,";}
-    if (FIT_NULL != field_speed){outfile << field_speed->GetSTRINGValue() << "\n";} else {outfile << "null\n";}
+    // To CSV record
+    if (FIT_NULL != field_timestamp){recordfile << field_timestamp->GetSTRINGValue() << ",";} else {recordfile << "null,";}
+    if (FIT_NULL != field_altitude){recordfile << field_altitude->GetSTRINGValue() << ",";} else {recordfile << "null,";}
+    if (FIT_NULL != field_power){recordfile << field_power->GetSTRINGValue() << ",";} else {recordfile << "null,";}
+    if (FIT_NULL != field_heartrate){recordfile << field_heartrate->GetSTRINGValue() << ",";} else {recordfile << "null,";}
+    if (FIT_NULL != field_cadence){recordfile << field_cadence->GetSTRINGValue() << ",";} else {recordfile << "null,";}
+    if (FIT_NULL != field_speed){recordfile << field_speed->GetSTRINGValue() << "\n";} else {recordfile << "null\n";}
+
+    // Save in vector for basic analysis
+    timestamp_vec.emplace_back(field_timestamp->GetUINT32Value());
+
+    if (FIT_NULL != field_altitude)
+    {altitude_vec.emplace_back(field_altitude->GetFLOAT32Value());} else {altitude_vec.emplace_back(NULL_HOLDER);}
+
+    if (FIT_NULL != field_power)
+    {power_vec.emplace_back(field_power->GetFLOAT32Value());} else {power_vec.emplace_back(NULL_HOLDER);}
+
+    if (FIT_NULL != field_heartrate)
+    {heartrate_vec.emplace_back(field_heartrate->GetFLOAT32Value());} else {heartrate_vec.emplace_back(NULL_HOLDER);}
+
+    if (FIT_NULL != field_cadence)
+    {cadence_vec.emplace_back(field_cadence->GetFLOAT32Value());} else {cadence_vec.emplace_back(NULL_HOLDER);}
+
+    if (FIT_NULL != field_speed)
+    {speed_vec.emplace_back(field_speed->GetFLOAT32Value());} else {speed_vec.emplace_back(NULL_HOLDER);}
 
     // run ./Activity.fit ./beta.csv
 };
@@ -89,4 +110,7 @@ void Listener::PrintValues(const fit::FieldBase& field)
 }
 
 void Listener::OnMesg(fit::LapMesg& mesg){}
-void Listener::OnMesg(fit::SessionMesg& mesg){}
+void Listener::OnMesg(fit::SessionMesg& mesg)
+{
+
+}
