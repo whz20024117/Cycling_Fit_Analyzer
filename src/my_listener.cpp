@@ -54,6 +54,9 @@ void Listener::OnMesg(fit::Mesg& mesg)
     if (mesg.GetName() == "record"){return;}
     if (mesg.GetName() == "device_info"){return;}
     if (mesg.GetName() == "lap"){return;}
+    if (mesg.GetName() == "event"){return;}
+    if (mesg.GetName() == "activity"){return;}
+    if (mesg.GetName() == "session"){return;}
 
     printf("On Mesg:\n");
     std::wcout << L"   New Mesg: " << mesg.GetName().c_str() << L".  It has " << mesg.GetNumFields() << L" field(s) and " << mesg.GetNumDevFields() << " developer field(s).\n";
@@ -109,8 +112,69 @@ void Listener::PrintValues(const fit::FieldBase& field)
         }
 }
 
-void Listener::OnMesg(fit::LapMesg& mesg){}
+void Listener::OnMesg(fit::LapMesg& mesg)
+{
+    fit::Field *field_timestamp = mesg.GetField(fit::LapMesg::FieldDefNum::Timestamp);
+    fit::Field *field_totalelapsedtime = mesg.GetField(fit::LapMesg::FieldDefNum::TotalElapsedTime);
+    fit::Field *field_totaldistance = mesg.GetField(fit::LapMesg::FieldDefNum::TotalDistance);
+    fit::Field *field_totalcalories = mesg.GetField(fit::LapMesg::FieldDefNum::TotalCalories);
+    fit::Field *field_avgspeed = mesg.GetField(fit::LapMesg::FieldDefNum::AvgSpeed);
+    fit::Field *field_maxspeed = mesg.GetField(fit::LapMesg::FieldDefNum::MaxSpeed);
+    fit::Field *field_avgpower = mesg.GetField(fit::LapMesg::FieldDefNum::AvgPower);
+    fit::Field *field_maxpower = mesg.GetField(fit::LapMesg::FieldDefNum::MaxPower);
+    fit::Field *field_totalascent = mesg.GetField(fit::LapMesg::FieldDefNum::TotalAscent);
+    fit::Field *field_totaldescent = mesg.GetField(fit::LapMesg::FieldDefNum::TotalDescent);
+    fit::Field *field_avgheartrate = mesg.GetField(fit::LapMesg::FieldDefNum::AvgHeartRate);
+    fit::Field *field_maxheartrate = mesg.GetField(fit::LapMesg::FieldDefNum::MaxHeartRate);
+    fit::Field *field_avgcadence = mesg.GetField(fit::LapMesg::FieldDefNum::AvgCadence);
+    fit::Field *field_maxcadence = mesg.GetField(fit::LapMesg::FieldDefNum::MaxCadence);
+
+    if (FIT_NULL != field_timestamp){lapfile << field_timestamp->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_totalelapsedtime){lapfile << field_totalelapsedtime->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_totaldistance){lapfile << field_totaldistance->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_totalcalories){lapfile << field_totalcalories->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_avgspeed){lapfile << field_avgspeed->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_maxspeed){lapfile << field_maxspeed->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_avgpower){lapfile << field_avgpower->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_maxpower){lapfile << field_maxpower->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_totalascent){lapfile << field_totalascent->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_totaldescent){lapfile << field_totaldescent->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_avgheartrate){lapfile << field_avgheartrate->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_maxheartrate){lapfile << field_maxheartrate->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_avgcadence){lapfile << field_avgcadence->GetSTRINGValue() << ",";} else {lapfile << "null,";}
+    if (FIT_NULL != field_maxcadence){lapfile << field_maxcadence->GetSTRINGValue() << "\n";} else {lapfile << "null\n";}
+}
+
 void Listener::OnMesg(fit::SessionMesg& mesg)
 {
+    fit::Field *field_timestamp = mesg.GetField(fit::SessionMesg::FieldDefNum::Timestamp);
+    fit::Field *field_totalelapsedtime = mesg.GetField(fit::SessionMesg::FieldDefNum::TotalElapsedTime);
+    fit::Field *field_totaldistance = mesg.GetField(fit::SessionMesg::FieldDefNum::TotalDistance);
+    fit::Field *field_totalcalories = mesg.GetField(fit::SessionMesg::FieldDefNum::TotalCalories);
+    fit::Field *field_avgspeed = mesg.GetField(fit::SessionMesg::FieldDefNum::AvgSpeed);
+    fit::Field *field_maxspeed = mesg.GetField(fit::SessionMesg::FieldDefNum::MaxSpeed);
+    fit::Field *field_avgpower = mesg.GetField(fit::SessionMesg::FieldDefNum::AvgPower);
+    fit::Field *field_maxpower = mesg.GetField(fit::SessionMesg::FieldDefNum::MaxPower);
+    fit::Field *field_totalascent = mesg.GetField(fit::SessionMesg::FieldDefNum::TotalAscent);
+    fit::Field *field_totaldescent = mesg.GetField(fit::SessionMesg::FieldDefNum::TotalDescent);
+    fit::Field *field_avgheartrate = mesg.GetField(fit::SessionMesg::FieldDefNum::AvgHeartRate);
+    fit::Field *field_maxheartrate = mesg.GetField(fit::SessionMesg::FieldDefNum::MaxHeartRate);
+    fit::Field *field_avgcadence = mesg.GetField(fit::SessionMesg::FieldDefNum::AvgCadence);
+    fit::Field *field_maxcadence = mesg.GetField(fit::SessionMesg::FieldDefNum::MaxCadence);
 
+    if (FIT_NULL != field_timestamp){sessionfile << field_timestamp->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_totalelapsedtime){sessionfile << field_totalelapsedtime->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_totaldistance){sessionfile << field_totaldistance->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_totalcalories){sessionfile << field_totalcalories->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_avgspeed){sessionfile << field_avgspeed->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_maxspeed){sessionfile << field_maxspeed->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_avgpower){sessionfile << field_avgpower->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_maxpower){sessionfile << field_maxpower->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_totalascent){sessionfile << field_totalascent->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_totaldescent){sessionfile << field_totaldescent->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_avgheartrate){sessionfile << field_avgheartrate->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_maxheartrate){sessionfile << field_maxheartrate->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_avgcadence){sessionfile << field_avgcadence->GetSTRINGValue() << ",";} else {sessionfile << "null,";}
+    if (FIT_NULL != field_maxcadence){sessionfile << field_maxcadence->GetSTRINGValue() << "\n";} else {sessionfile << "null\n";}
+    
 }

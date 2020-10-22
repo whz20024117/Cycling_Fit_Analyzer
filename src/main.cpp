@@ -7,18 +7,14 @@
 
 int main(int argc, char* argv[])
 {
-    fit::Decode decode;
-   
-    fit::MesgBroadcaster mesgBroadcaster;
-    Listener listener(argv[2]);
-    std::fstream file;
-
-
+    
     if (argc != 3)
     {
         printf("Usage: beta <fit_file> <out_dir>\n");
         return -1;
     }
+
+    std::fstream file;
 
     file.open(argv[1], std::ios::in | std::ios::binary);
     
@@ -28,13 +24,20 @@ int main(int argc, char* argv[])
         return -1;
     }
 
+    fit::Decode decode;
+
     if (!decode.CheckIntegrity(file))
     {
         printf("FIT file integrity failed.\nAttempting to decode...\n");
     }
 
-    mesgBroadcaster.AddListener((fit::MesgListener &) listener);
+    fit::MesgBroadcaster mesgBroadcaster;
+    Listener listener(argv[2]);
+    
+    mesgBroadcaster.AddListener((fit::MesgListener&) listener);
     mesgBroadcaster.AddListener((fit::RecordMesgListener&) listener);
+    mesgBroadcaster.AddListener((fit::LapMesgListener&) listener);
+    mesgBroadcaster.AddListener((fit::SessionMesgListener&) listener);
     
 
     try

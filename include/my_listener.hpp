@@ -15,6 +15,7 @@ class Listener
 {
     std::wofstream recordfile;
     std::wofstream sessionfile;
+    std::wofstream lapfile;
     std::vector<FIT_UINT32> timestamp_vec;
     std::vector<FIT_FLOAT32> altitude_vec;
     std::vector<FIT_FLOAT32> power_vec;
@@ -25,7 +26,12 @@ class Listener
     public:
         Listener(std::string path)
         {
-            recordfile.open(path.c_str());
+            // Prep Record File
+            recordfile.open((path + "/records.csv").c_str());
+            if(!recordfile.is_open()){
+                printf(" Please make sure the directory is valid and existed.\n");
+                exit(-1);
+            }
             recordfile<< "timestamp(s)," 
             << "altitude(m)," 
             << "power(watts)," 
@@ -34,11 +40,47 @@ class Listener
             <<"speed(m/s)"
             <<"\n";
 
+            // Prep Session File
+            sessionfile.open((path + "/sessions.csv").c_str());
+            sessionfile<< "timestamp(s),"
+            << "total_elapsed_time(s),"
+            << "total_distance(m),"
+            << "total_calories(kcal),"
+            << "avg_speed(m/s),"
+            << "max_speed(m/s),"
+            << "avg_power(watts),"
+            << "max_power(watts),"
+            << "total_ascent(m),"
+            << "total_descent(m),"
+            << "avg_heart_rate(bpm),"
+            << "max_heart_rate(bpm),"
+            << "avg_cadence(rpm),"
+            << "max_cadence(rpm)"
+            <<"\n";
 
+            // Prep Lap File
+            lapfile.open((path + "/lap.csv").c_str());
+            lapfile<< "timestamp(s),"
+            << "total_elapsed_time(s),"
+            << "total_distance(m),"
+            << "total_calories(kcal),"
+            << "avg_speed(m/s),"
+            << "max_speed(m/s),"
+            << "avg_power(watts),"
+            << "max_power(watts),"
+            << "total_ascent(m),"
+            << "total_descent(m),"
+            << "avg_heart_rate(bpm),"
+            << "max_heart_rate(bpm),"
+            << "avg_cadence(rpm),"
+            << "max_cadence(rpm)"
+            <<"\n";
         }
         ~Listener()
         {
             recordfile.close();
+            sessionfile.close();
+            lapfile.close();
         }
         void OnMesg(fit::Mesg& mesg) override;
         void OnMesg(fit::RecordMesg& mesg) override;
