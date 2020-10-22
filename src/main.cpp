@@ -2,8 +2,8 @@
 #include<fstream>
 
 #include "my_listener.hpp"
-#include "fit_decode.hpp"
-#include "fit_mesg_broadcaster.hpp"
+#include "../lib/fitsdk/fit_decode.hpp"
+#include "../lib/fitsdk/fit_mesg_broadcaster.hpp"
 
 int main(int argc, char* argv[])
 {
