@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
     
     if (argc != 3)
     {
-        printf("Usage: beta <fit_file> <out_dir>\n");
+        printf("Usage: cfa <fit_file> <out_dir>\n");
         return -1;
     }
 
@@ -161,7 +161,6 @@ int main(int argc, char* argv[])
         std::wcout
         << L"   Timeframe(s): "<< cpc_tf[i] <<"\n"
         << L"   Critical_Power(watts): " << cpc_cp[i] <<"\n"
-        << L"   When(s): " << cpc_st[i] <<"\n"
         <<"\n"
         ;
         }
