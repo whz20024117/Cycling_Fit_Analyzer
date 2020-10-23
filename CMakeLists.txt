@@ -38,7 +38,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 project("Cycling_Fit_Analyzer" LANGUAGES CXX)
 
 add_executable(cfa src/main.cpp src/my_listener.cpp)
-target_include_directories(cfa PUBLIC include /lib/fitsdk)
+target_include_directories(cfa PUBLIC include lib/fitsdk lib/)
 
 file(GLOB fitsdk_SRC "lib/fitsdk/*.hpp" "lib/fitsdk/*.cpp")
 add_library(fitsdk STATIC "${fitsdk_SRC}")

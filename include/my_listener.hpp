@@ -2,9 +2,9 @@
 #include <iostream>
 #include <string>
 
-#include "../lib/fitsdk/fit_decode.hpp"
-#include "../lib/fitsdk/fit_mesg_broadcaster.hpp"
-#include "../lib/fitsdk/fit_developer_field_description.hpp"
+#include "fitsdk/fit_decode.hpp"
+#include "fitsdk/fit_mesg_broadcaster.hpp"
+#include "fitsdk/fit_developer_field_description.hpp"
 
 struct sessionSummary
 {
