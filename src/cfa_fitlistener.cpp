@@ -6,14 +6,14 @@
 #include "fitsdk/fit_decode.hpp"
 #include "fitsdk/fit_mesg_broadcaster.hpp"
 #include "fitsdk/fit_developer_field_description.hpp"
-#include "cfa_listener.hpp"
+#include "cfa_fitlistener.hpp"
 
 #define NULL_HOLDER -100.0
 
 namespace cfa
 {
 
-    void Listener::OnMesg(fit::RecordMesg& mesg)
+    void FitListener::OnMesg(fit::RecordMesg& mesg)
     {
         // get all the interested fields from Record Message
         fit::Field *field_timestamp = mesg.GetField(fit::RecordMesg::FieldDefNum::Timestamp);
@@ -52,7 +52,7 @@ namespace cfa
         // run ./Activity.fit ./beta.csv
     };
 
-    void Listener::OnMesg(fit::Mesg& mesg)
+    void FitListener::OnMesg(fit::Mesg& mesg)
     {   
         // Debug Function for all mesg
         if (mesg.GetName() == "record"){return;}
@@ -80,7 +80,7 @@ namespace cfa
         }
     }
 
-    void Listener::PrintValues(const fit::FieldBase& field)
+    void FitListener::PrintValues(const fit::FieldBase& field)
     {
         // This is a debug function from fitsdk library
             for (FIT_UINT8 j=0; j< (FIT_UINT8)field.GetNumValues(); j++)
@@ -118,7 +118,7 @@ namespace cfa
             }
     }
 
-    void Listener::OnMesg(fit::LapMesg& mesg)
+    void FitListener::OnMesg(fit::LapMesg& mesg)
     {
         fit::Field *field_timestamp = mesg.GetField(fit::LapMesg::FieldDefNum::Timestamp);
         fit::Field *field_totalelapsedtime = mesg.GetField(fit::LapMesg::FieldDefNum::TotalElapsedTime);
@@ -151,7 +151,7 @@ namespace cfa
         if (FIT_NULL != field_maxcadence){lapfile << field_maxcadence->GetSTRINGValue() << "\n";} else {lapfile << "null\n";}
     }
 
-    void Listener::OnMesg(fit::SessionMesg& mesg)
+    void FitListener::OnMesg(fit::SessionMesg& mesg)
     {
         fit::Field *field_timestamp = mesg.GetField(fit::SessionMesg::FieldDefNum::Timestamp);
         fit::Field *field_totalelapsedtime = mesg.GetField(fit::SessionMesg::FieldDefNum::TotalElapsedTime);
@@ -216,7 +216,7 @@ namespace cfa
         
     }
 
-    const std::vector<sessionSummary> Listener::getSummaries()
+    const std::vector<sessionSummary> FitListener::getSummaries()
     {
         return summaries;
     }

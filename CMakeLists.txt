@@ -30,20 +30,51 @@ if(Win)
 endif()
 #--------------------------------------------------
 
-# Debug flag for g++
+# # Debug flag for g++
 # set(CMAKE_CXX_FLAGS_DEBUG  "-g")
 # set(CMAKE_BUILD_TYPE Debug)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 project("Cycling_Fit_Analyzer" LANGUAGES CXX)
 
-add_executable(cfa src/main.cpp src/cfa_listener.cpp src/cfa_analysis.cpp)
-target_include_directories(cfa PUBLIC include/ lib/fitsdk lib/)
+############## QT Settings ##################
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
+############ Static Libraries ##################
+# fitsdk
 file(GLOB fitsdk_SRC "lib/fitsdk/*.hpp" "lib/fitsdk/*.cpp")
 add_library(fitsdk STATIC "${fitsdk_SRC}")
 
-target_link_libraries(cfa PRIVATE fitsdk)
+# qcustomplot
+add_library(qcustomplot STATIC "lib/qcustomplot/qcustomplot.cpp" "lib/qcustomplot/qcustomplot.h")
+target_link_libraries(qcustomplot Qt5::Widgets)
+
+########## GUI ############
+
+add_executable(cfa_gui
+    src/cfa_gui_window.ui
+    src/cfa_gui_window.cpp
+    src/cfa_gui.cpp
+    include/cfa_gui_window.hpp
+)
+target_include_directories(cfa_gui PUBLIC include/)
+target_link_libraries(cfa_gui Qt5::Widgets)
+
+########## CMD ##############
+
+add_executable(cfa_cmd 
+    src/cfa_cmd.cpp 
+    src/cfa_fitlistener.cpp 
+    src/cfa_analysis.cpp
+
+    include/cfa_fitlistener.hpp 
+    include/cfa_analysis.hpp
+)
+
+target_include_directories(cfa_cmd PUBLIC include/ lib/fitsdk lib/)
+target_link_libraries(cfa_cmd PRIVATE fitsdk)
 
 # set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

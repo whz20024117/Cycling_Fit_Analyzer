@@ -25,7 +25,7 @@ namespace cfa
         float descent;
     };
 
-    class Listener
+    class FitListener
         : 
         public fit::MesgListener
         , public fit::RecordMesgListener
@@ -46,7 +46,7 @@ namespace cfa
             std::vector<FIT_FLOAT32> cadence_vec;
             std::vector<FIT_FLOAT32> speed_vec;
 
-            Listener(std::string path)
+            FitListener(std::string path)
             {
                 // Prep Record File
                 recordfile.open((path + "/records.csv").c_str());
@@ -98,18 +98,17 @@ namespace cfa
                 << "max_cadence(rpm)"
                 <<"\n";
             }
-            ~Listener()
-            {
-                recordfile.close();
-                sessionfile.close();
-                lapfile.close();
-            }
+
             void OnMesg(fit::Mesg& mesg) override;
             void OnMesg(fit::RecordMesg& mesg) override;
             void OnMesg(fit::LapMesg& mesg) override;
             void OnMesg(fit::SessionMesg& mesg) override;
             static void PrintValues(const fit::FieldBase& field);
             const std::vector<sessionSummary> getSummaries();
+
+        private:
+            FitListener(const FitListener&);
+            FitListener& operator=(const FitListener&);
 
     };
 

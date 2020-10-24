@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "cfa_listener.hpp"
+#include "cfa_fitlistener.hpp"
 #include "cfa_analysis.hpp"
 #include "fitsdk/fit_mesg_broadcaster.hpp"
 
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     }
 
     fit::MesgBroadcaster mesgBroadcaster;
-    cfa::Listener listener(argv[2]);
+    cfa::FitListener listener(argv[2]);
     
     mesgBroadcaster.AddListener((fit::MesgListener&) listener);
     mesgBroadcaster.AddListener((fit::RecordMesgListener&) listener);
