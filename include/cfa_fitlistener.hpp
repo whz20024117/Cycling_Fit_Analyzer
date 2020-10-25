@@ -46,7 +46,7 @@ namespace cfa
             std::vector<FIT_FLOAT32> cadence_vec;
             std::vector<FIT_FLOAT32> speed_vec;
 
-            FitListener(std::string path)
+            explicit FitListener(std::string path)
             {
                 // Prep Record File
                 recordfile.open((path + "/records.csv").c_str());
