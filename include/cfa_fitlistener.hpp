@@ -32,12 +32,6 @@ namespace cfa
         , public fit::LapMesgListener
         , public fit::SessionMesgListener
     {
-        std::wofstream recordfile;
-        std::wofstream sessionfile;
-        std::wofstream lapfile;
-
-        std::vector<sessionSummary> summaries;
-        
         public:
             std::vector<FIT_UINT32> timestamp_vec;
             std::vector<FIT_FLOAT32> altitude_vec;
@@ -46,58 +40,7 @@ namespace cfa
             std::vector<FIT_FLOAT32> cadence_vec;
             std::vector<FIT_FLOAT32> speed_vec;
 
-            explicit FitListener(std::string path)
-            {
-                // Prep Record File
-                recordfile.open((path + "/records.csv").c_str());
-                if(!recordfile.is_open()){
-                    printf(" Please make sure the directory is valid and existed.\n");
-                    exit(-1);
-                }
-                recordfile<< "timestamp(s)," 
-                << "altitude(m)," 
-                << "power(watts)," 
-                << "heart_rate(bpm)," 
-                << "cadence(rpm),"
-                <<"speed(m/s)"
-                <<"\n";
-
-                // Prep Session File
-                sessionfile.open((path + "/sessions.csv").c_str());
-                sessionfile<< "timestamp(s),"
-                << "total_elapsed_time(s),"
-                << "total_distance(m),"
-                << "total_calories(kcal),"
-                << "avg_speed(m/s),"
-                << "max_speed(m/s),"
-                << "avg_power(watts),"
-                << "max_power(watts),"
-                << "total_ascent(m),"
-                << "total_descent(m),"
-                << "avg_heart_rate(bpm),"
-                << "max_heart_rate(bpm),"
-                << "avg_cadence(rpm),"
-                << "max_cadence(rpm)"
-                <<"\n";
-
-                // Prep Lap File
-                lapfile.open((path + "/lap.csv").c_str());
-                lapfile<< "timestamp(s),"
-                << "total_elapsed_time(s),"
-                << "total_distance(m),"
-                << "total_calories(kcal),"
-                << "avg_speed(m/s),"
-                << "max_speed(m/s),"
-                << "avg_power(watts),"
-                << "max_power(watts),"
-                << "total_ascent(m),"
-                << "total_descent(m),"
-                << "avg_heart_rate(bpm),"
-                << "max_heart_rate(bpm),"
-                << "avg_cadence(rpm),"
-                << "max_cadence(rpm)"
-                <<"\n";
-            }
+            explicit FitListener(std::wofstream& recordfile, std::wofstream& sessionfile, std::wofstream& lapfile);
 
             void OnMesg(fit::Mesg& mesg) override;
             void OnMesg(fit::RecordMesg& mesg) override;
@@ -107,8 +50,15 @@ namespace cfa
             const std::vector<sessionSummary> getSummaries();
 
         private:
+            // Restrict copying
             FitListener(const FitListener&);
             FitListener& operator=(const FitListener&);
+            
+            std::wofstream& recordfile;
+            std::wofstream& sessionfile;
+            std::wofstream& lapfile;
+
+            std::vector<sessionSummary> summaries;
 
     };
 

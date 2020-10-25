@@ -7,6 +7,7 @@
 #include "cfa_fitlistener.hpp"
 #include "cfa_analysis.hpp"
 #include "fitsdk/fit_mesg_broadcaster.hpp"
+#include "qcustomplot/qcustomplot.h"
 
 
 int main(int argc, char* argv[])
@@ -35,9 +36,24 @@ int main(int argc, char* argv[])
         printf("FIT file integrity failed.\nAttempting to decode...\n");
     }
 
-    fit::MesgBroadcaster mesgBroadcaster;
-    cfa::FitListener listener(argv[2]);
+    // Open outputfiles
+    std::string output_dir(argv[2]);
+    std::wofstream recordfile;
+    std::wofstream sessionfile;
+    std::wofstream lapfile;
+    recordfile.open((output_dir + "/records.csv").c_str());
+    if (!recordfile.is_open())
+    {
+        printf("Please makesure output directory is valid and existed.\n");
+        exit(-1);
+    }
+    sessionfile.open((output_dir + "/sessions.csv").c_str());
+    lapfile.open((output_dir + "/lap.csv").c_str());
     
+    cfa::FitListener listener(recordfile, sessionfile, lapfile);
+    
+    // Create Broadcaster for different mesgs
+    fit::MesgBroadcaster mesgBroadcaster;
     mesgBroadcaster.AddListener((fit::MesgListener&) listener);
     mesgBroadcaster.AddListener((fit::RecordMesgListener&) listener);
     mesgBroadcaster.AddListener((fit::LapMesgListener&) listener);
@@ -54,7 +70,9 @@ int main(int argc, char* argv[])
         printf("Exception decoding file: %s\n", e.what());
         return -1;
     } // End reading
-
+    // recordfile.close();
+    // sessionfile.close();
+    // lapfile.close();
     
     
     // Stdout Session summary(s)
@@ -96,11 +114,11 @@ int main(int argc, char* argv[])
         // stdout
         for(int i=0; i<cpc_tf.size(); i++)
         {
-        std::wcout
-        << L"   Timeframe(s): "<< cpc_tf[i] <<"\n"
-        << L"   Critical_Power(watts): " << cpc_cp[i] <<"\n"
-        <<"\n"
-        ;
+            std::wcout
+            << L"   Timeframe(s): "<< cpc_tf[i] <<"\n"
+            << L"   Critical_Power(watts): " << cpc_cp[i] <<"\n"
+            <<"\n"
+            ;
         }
 
         // Write to File
@@ -123,11 +141,18 @@ int main(int argc, char* argv[])
         }
 
         powerCurve.close();
+        
+        // Plot
+
+        //QCPCurve *powerCurve = new QCPCurve();
+
         }
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
+
+
     
 
 }

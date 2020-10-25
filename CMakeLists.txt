@@ -40,7 +40,7 @@ project("Cycling_Fit_Analyzer" LANGUAGES CXX)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Core Gui REQUIRED)
 
 ############ Static Libraries ##################
 # fitsdk
@@ -74,7 +74,7 @@ add_executable(cfa_cmd
 )
 
 target_include_directories(cfa_cmd PUBLIC include/ lib/fitsdk lib/)
-target_link_libraries(cfa_cmd PRIVATE fitsdk)
+target_link_libraries(cfa_cmd fitsdk Qt5::Core Qt5::Gui)
 
 # set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

@@ -13,6 +13,67 @@
 namespace cfa
 {
 
+    FitListener::FitListener(std::wofstream& recordfile, std::wofstream& sessionfile, std::wofstream& lapfile)
+        :recordfile(recordfile), sessionfile(sessionfile), lapfile(lapfile)
+    {
+        // Prep Lapfile
+        if(!recordfile.is_open()){
+            printf(" recordfile not open.\n");
+            exit(-1);
+        }
+        recordfile<< "timestamp(s)," 
+        << "altitude(m)," 
+        << "power(watts)," 
+        << "heart_rate(bpm)," 
+        << "cadence(rpm),"
+        <<"speed(m/s)"
+        <<"\n";
+
+        // Prep Session File
+        if(!sessionfile.is_open()){
+            printf(" sessionfile not open.\n");
+            exit(-1);
+        }
+
+        sessionfile<< "timestamp(s),"
+        << "total_elapsed_time(s),"
+        << "total_distance(m),"
+        << "total_calories(kcal),"
+        << "avg_speed(m/s),"
+        << "max_speed(m/s),"
+        << "avg_power(watts),"
+        << "max_power(watts),"
+        << "total_ascent(m),"
+        << "total_descent(m),"
+        << "avg_heart_rate(bpm),"
+        << "max_heart_rate(bpm),"
+        << "avg_cadence(rpm),"
+        << "max_cadence(rpm)"
+        <<"\n";
+
+        // Prep Lap File
+        if(!lapfile.is_open()){
+            printf(" lapfile not open.\n");
+            exit(-1);
+        }
+
+        lapfile<< "timestamp(s),"
+        << "total_elapsed_time(s),"
+        << "total_distance(m),"
+        << "total_calories(kcal),"
+        << "avg_speed(m/s),"
+        << "max_speed(m/s),"
+        << "avg_power(watts),"
+        << "max_power(watts),"
+        << "total_ascent(m),"
+        << "total_descent(m),"
+        << "avg_heart_rate(bpm),"
+        << "max_heart_rate(bpm),"
+        << "avg_cadence(rpm),"
+        << "max_cadence(rpm)"
+        <<"\n";
+    }
+
     void FitListener::OnMesg(fit::RecordMesg& mesg)
     {
         // get all the interested fields from Record Message
