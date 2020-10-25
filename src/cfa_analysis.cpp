@@ -11,18 +11,33 @@ namespace cfa
 
     std::vector<std::vector<float>> getPowerCurveVector(std::vector<FIT_UINT32>& timestamp_vec, std::vector<float>& power_vec)
     {
+        
+        // Input Check
         if(!(timestamp_vec.size() == power_vec.size()))
         {
             throw std::runtime_error("    Skipping CP generation on error: Powervec and timestamp_vec not consistent.");
         }
         
+        bool isPowerVecValid = false;
+
         for (int i=0; i<power_vec.size(); i++)
         {
-            if (power_vec[i] < 0){
-                throw std::runtime_error("    Skipping CP generation on error: Invalid or missing power records.");
+            if (power_vec[i] > 0)
+            {
+                isPowerVecValid = true;
+                break;
             }
         }
 
+        if(!isPowerVecValid)
+        {
+            throw std::runtime_error("    Skipping CP generation: Invalid or missing power records.");
+        }
+
+        fillNullPower(power_vec);
+
+
+        // Generation starts here
         int duration = timestamp_vec[timestamp_vec.size() - 1] - timestamp_vec[0];
         
         std::vector<std::vector<float>> ret;
@@ -73,6 +88,33 @@ namespace cfa
         ret.emplace_back(stamp);
 
         return ret;
+    }
+
+    void fillNullPower(std::vector<float>& power_vec)
+    // This function cannot be debugged until I buy a power meter :(
+    {
+        // Assume at least one (should be most in real case) valid power number
+        if (power_vec[0] < 0)
+        {
+            int i = 0;
+            while(true)
+            {
+                if(power_vec[i] >= 0){
+                    power_vec[0] = power_vec[i];
+                    break;
+                }
+                i++;
+            }
+        }
+
+        for(int i=1; i<power_vec.size(); i++)
+        {
+            if (power_vec[i]<0)
+            {
+                power_vec[i] = power_vec[i-1];
+            }
+        }
+
     }
 
 }

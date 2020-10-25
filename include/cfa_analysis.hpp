@@ -11,6 +11,7 @@ namespace cfa
 {
 
     std::vector<std::vector<float>> getPowerCurveVector(std::vector<FIT_UINT32>& timestamp_vec, std::vector<float>& power_vec);
+    void fillNullPower(std::vector<float>& power_vec);
 
 
 }

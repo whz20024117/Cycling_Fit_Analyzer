@@ -1,6 +1,6 @@
 /.vscode
 /FitSDKRelease_21.40.00.zip
-/beta.csv
+/*.csv
 /bin
 /build
 /cp_script.sh
@@ -8,8 +8,9 @@
 /fitsdk
 /obj
 /test.txt
-/z1.fit
+/*.fit
 /lib/obj
 /lib/build
 /tmp
 /output
+CMakeLists.txt.user
