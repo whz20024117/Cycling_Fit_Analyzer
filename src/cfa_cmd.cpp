@@ -7,12 +7,13 @@
 #include "cfa_fitlistener.hpp"
 #include "cfa_analysis.hpp"
 #include "fitsdk/fit_mesg_broadcaster.hpp"
-#include "qcustomplot/qcustomplot.h"
+
+#include "cfa_cmd_export_plot.hpp"
 
 
 int main(int argc, char* argv[])
 {
-    
+
     if (argc != 3)
     {
         printf("Usage: cfa <fit_file> <out_dir>\n");
@@ -70,9 +71,9 @@ int main(int argc, char* argv[])
         printf("Exception decoding file: %s\n", e.what());
         return -1;
     } // End reading
-    // recordfile.close();
-    // sessionfile.close();
-    // lapfile.close();
+    recordfile.close();
+    sessionfile.close();
+    lapfile.close();
     
     
     // Stdout Session summary(s)
@@ -144,7 +145,7 @@ int main(int argc, char* argv[])
         
         // Plot
 
-        //QCPCurve *powerCurve = new QCPCurve();
+        cfa::showPlot(argc, argv, cpc_tf, cpc_cp);
 
         }
     catch(const std::exception& e)
