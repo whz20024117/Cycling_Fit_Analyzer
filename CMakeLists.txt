@@ -26,6 +26,7 @@ if(Win)
     # Compiler flag
     set(CMAKE_BUILD_TYPE Release)
     set(CMAKE_CXX_FLAGS_RELEASE "-static")
+    set(CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu/cmake/")
 
 endif()
 #--------------------------------------------------
