@@ -24,8 +24,9 @@ if(Win)
     set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
     # Compiler flag
-    set(CMAKE_BUILD_TYPE Release)
-    set(CMAKE_CXX_FLAGS_RELEASE "-static")
+    # set(CMAKE_BUILD_TYPE Release)
+    # set(CMAKE_CXX_FLAGS_RELEASE "-static" CACHE STRING "static link libgcc" FORCE)
+    add_compile_options(-static)
     set(CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu/cmake/")
 
 endif()
