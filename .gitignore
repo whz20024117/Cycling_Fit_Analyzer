@@ -16,3 +16,4 @@
 CMakeLists.txt.user
 /.vs
 /out
+/CMakeSettings.json
