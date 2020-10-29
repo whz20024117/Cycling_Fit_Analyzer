@@ -14,3 +14,5 @@
 /tmp
 /output
 CMakeLists.txt.user
+/.vs
+/out
